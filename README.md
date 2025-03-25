@@ -7,7 +7,7 @@ git commit -m 'любой комментарий'
 git push
 
 
-php -S localhost:8080
+php -S localhost:8080 терминал
 
 
-ngrok http http://localhost:8080
+ngrok http http://localhost:8080 на ингрок
